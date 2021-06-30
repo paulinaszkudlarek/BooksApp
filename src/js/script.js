@@ -5,9 +5,12 @@
     templateOf: {
       books: '#template-book',
     },
-    book: {
+    list: {
       bookList: '.books-list',
-      bookImage: '.book__image',
+    },
+    all: {
+      books: '.book',
+      bookImages: '.book__image', 
     },
     container: '.container',
   };
@@ -39,51 +42,45 @@
       
       thisApp.dom = {};
       thisApp.dom.wrapper = document.querySelector(select.container);
-      thisApp.dom.bookList = document.querySelector(select.book.bookList);
-      thisApp.dom.bookImages = document.querySelectorAll(select.book.bookImage);
+      thisApp.dom.bookList = document.querySelector(select.list.bookList);
+      thisApp.dom.books = document.querySelectorAll(select.all.books);
+      thisApp.dom.bookImages = document.querySelectorAll(select.all.bookImages);
+      console.log('thisApp.dom: ', thisApp.dom);
+      // nie znalazło bookImage. why?
     },
 
     render() {
-      const thisApp = this;  
+      const thisApp = this; 
 
       for(let bookData of thisApp.data.books) {
         const html = templates.book(bookData);
         const bookDOM = utils.createDOMFromHTML(html); 
         thisApp.dom.bookList.appendChild(bookDOM);
       }
+      thisApp.getElements(); //wywołałam drugi raz getElements, aby stworzyć thisApp.dom.books i thisApp.dom.bookImages - to chyba nie za dobre rozwiązanie?
     },
   
     initActions() {
       const thisApp = this;
       
-      thisApp.allBookImages = document.querySelectorAll(select.book.bookImage);
-      console.log('thisApp. allBookImages: ', thisApp.allBookImages);
+      const allBookImages = thisApp.dom.bookImages; 
 
-      for(let bookImage in thisApp.allBookImages) {
+      for(let bookImage of allBookImages) {
+        
         bookImage.addEventListener('dblclick', function(event) {
-          event.PreventDefault();
-          thisApp.addToFavourite(bookImage);
-        });
+          event.preventDefault();
+          thisApp.addToFavorite(bookImage);
+        });  
       }
-      console.log('thisApp: ', thisApp);
     },
 
-    addToFavourite(bookImage){
-      const thisApp = this;
-      console.log('bookImage: ', bookImage);
-      const favouriteBooks = [];
-      for(let book in thisApp.dom.bookList) {
-        book.classList.add('favourite');
-        const bookID = bookImage.data-id;
-        console.log('Dodano do ulubionych!');
-      }
-      
-    },
+    addToFavorite(clickedBook) {
+      const favoriteBooks = []; 
+      clickedBook.classList.add('favorite'); 
+      const bookID = clickedBook.getAttribute('data-id');
+      favoriteBooks.push(bookID);
+    }
   };
-  
-  
-
-  
 
   app.initApp();
 }
