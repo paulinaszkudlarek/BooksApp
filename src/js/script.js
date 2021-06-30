@@ -7,6 +7,7 @@
     },
     book: {
       bookList: '.books-list',
+      bookImage: '.book__image',
     },
     container: '.container',
   };
@@ -17,41 +18,72 @@
 
   const app = {
     
-    initApp: function() { 
+    initApp(){ 
       const thisApp = this;
       
       thisApp.initData();
       thisApp.getElements();
       thisApp.render();
+      thisApp.initActions();
     },
 
-    initData: function() {
+    initData() {
       const thisApp = this;
       
       thisApp.data = dataSource;
       thisApp.data.books = dataSource.books;
     },
 
-    getElements: function() {
+    getElements() {
       const thisApp = this;
       
       thisApp.dom = {};
       thisApp.dom.wrapper = document.querySelector(select.container);
-      //console.log('this.dom.container: ', this.dom.container);
       thisApp.dom.bookList = document.querySelector(select.book.bookList);
+      thisApp.dom.bookImages = document.querySelectorAll(select.book.bookImage);
     },
 
-    render: function() {
+    render() {
       const thisApp = this;  
 
       for(let bookData of thisApp.data.books) {
         const html = templates.book(bookData);
-        const bookDom = utils.createDOMFromHTML(html); 
-        thisApp.dom.bookList.appendChild(bookDom);
+        const bookDOM = utils.createDOMFromHTML(html); 
+        thisApp.dom.bookList.appendChild(bookDOM);
       }
     },
-    
+  
+    initActions() {
+      const thisApp = this;
+      
+      thisApp.allBookImages = document.querySelectorAll(select.book.bookImage);
+      console.log('thisApp. allBookImages: ', thisApp.allBookImages);
+
+      for(let bookImage in thisApp.allBookImages) {
+        bookImage.addEventListener('dblclick', function(event) {
+          event.PreventDefault();
+          thisApp.addToFavourite(bookImage);
+        });
+      }
+      console.log('thisApp: ', thisApp);
+    },
+
+    addToFavourite(bookImage){
+      const thisApp = this;
+      console.log('bookImage: ', bookImage);
+      const favouriteBooks = [];
+      for(let book in thisApp.dom.bookList) {
+        book.classList.add('favourite');
+        const bookID = bookImage.data-id;
+        console.log('Dodano do ulubionych!');
+      }
+      
+    },
   };
   
+  
+
+  
+
   app.initApp();
 }
