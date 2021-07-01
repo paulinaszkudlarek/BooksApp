@@ -95,17 +95,17 @@
         && event.srcElement.name == 'filter') {
           
           if(event.srcElement.checked == true
-            && !favoriteBooks.includes(event.srcElement.value)) {
-            favoriteBooks.push(event.srcElement.value);
+            && !thisApp.filters.includes(event.srcElement.value)) {
+            thisApp.filters.push(event.srcElement.value);
             console.log('event.srcElement.checked: ', event.srcElement.checked);
             console.log('zaznaczono filtr: ', event.srcElement.value);
 
           } else if(event.srcElement.checked == false) {
-            const index = favoriteBooks.indexOf(event.srcElement.value);
-            favoriteBooks.splice(index, 1);
+            const index = thisApp.filters.indexOf(event.srcElement.value);
+            thisApp.filters.splice(index, 1);
             console.log('odznaczono filtr: ', event.srcElement.value);
           }
-          console.log('thisApp.favoriteBooks: ', thisApp.favoriteBooks);
+          console.log('thisApp.filters: ', thisApp.filters);
         
         }
       });
