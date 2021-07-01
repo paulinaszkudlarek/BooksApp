@@ -51,6 +51,7 @@
       thisApp.dom.books = document.querySelectorAll(select.all.books);
       thisApp.dom.bookImages = document.querySelectorAll(select.all.bookImages);
       thisApp.dom.filterform = document.querySelector(select.form.filters);
+      console.log('thisApp.dom: ', thisApp.dom);
     },
 
     render() {
@@ -62,6 +63,7 @@
         thisApp.dom.bookList.appendChild(bookDOM);
       }
       thisApp.getElements(); //wywołałam drugi raz getElements, aby stworzyć thisApp.dom.books i thisApp.dom.bookImages - to chyba nie za dobre rozwiązanie?
+      console.log('thisApp.dom: ', thisApp.dom);
     },
   
     initActions() {
@@ -99,6 +101,7 @@
             thisApp.filters.push(event.srcElement.value);
             console.log('event.srcElement.checked: ', event.srcElement.checked);
             console.log('zaznaczono filtr: ', event.srcElement.value);
+            thisApp.bookfilter();
 
           } else if(event.srcElement.checked == false) {
             const index = thisApp.filters.indexOf(event.srcElement.value);
@@ -106,7 +109,6 @@
             console.log('odznaczono filtr: ', event.srcElement.value);
           }
           console.log('thisApp.filters: ', thisApp.filters);
-        
         }
       });
     },
