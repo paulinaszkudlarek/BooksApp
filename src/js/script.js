@@ -12,6 +12,9 @@
       books: '.book',
       bookImages: '.book__image', 
     },
+    form: {
+      filters: '.filters',
+    },
     container: '.container',
   };
   const templates = {
@@ -35,6 +38,8 @@
       
       thisApp.data = dataSource;
       thisApp.data.books = dataSource.books;
+      thisApp.favoriteBooks = [];
+      thisApp.filters = [];
     },
 
     getElements() {
@@ -45,8 +50,7 @@
       thisApp.dom.bookList = document.querySelector(select.list.bookList);
       thisApp.dom.books = document.querySelectorAll(select.all.books);
       thisApp.dom.bookImages = document.querySelectorAll(select.all.bookImages);
-      console.log('thisApp.dom: ', thisApp.dom);
-      // nie znalazło bookImage. why?
+      thisApp.dom.filterform = document.querySelector(select.form.filters);
     },
 
     render() {
@@ -63,23 +67,36 @@
     initActions() {
       const thisApp = this;
       
-      const allBookImages = thisApp.dom.bookImages; 
+      const favoriteBooks = thisApp.favoriteBooks;
 
-      for(let bookImage of allBookImages) {
+      thisApp.dom.bookList.addEventListener('dblclick', function(event) {
+        event.preventDefault();
         
-        bookImage.addEventListener('dblclick', function(event) {
-          event.preventDefault();
-          thisApp.addToFavorite(bookImage);
-        });  
-      }
+        if(event.target.parentNode.parentNode.classList.contains('book__image')) {
+          event.target.parentNode.parentNode.classList.toggle('favorite'); 
+          const bookId = event.target.parentNode.parentNode.getAttribute('data-id');
+        
+          if(event.target.parentNode.parentNode.classList.contains('favorite')) {
+            favoriteBooks.push(bookId);
+        
+          } else {
+            const index = favoriteBooks.indexOf(bookId);
+            favoriteBooks.splice(index, 1);
+          }
+          console.log('thisApp.favoriteBooks: ', thisApp.favoriteBooks);
+        }
+      });
+      
+      thisApp.dom.filterform.addEventListener('click', function(event) {
+        event.preventDefault();
+        console.log('event: ', event);
+        if(event.srcElement.tagName == 'INPUT' 
+        && event.srcElement.type == 'checkbox' 
+        && event.srcElement.name == 'filter') {
+          console.log('event.srcElement.value: ', event.srcElement.value);
+        }
+      });
     },
-
-    addToFavorite(clickedBook) {
-      const favoriteBooks = []; 
-      clickedBook.classList.add('favorite'); 
-      const bookID = clickedBook.getAttribute('data-id');
-      favoriteBooks.push(bookID);
-    }
   };
 
   app.initApp();
