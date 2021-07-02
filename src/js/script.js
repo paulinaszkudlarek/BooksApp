@@ -38,8 +38,7 @@
       
       thisApp.data = dataSource;
       thisApp.data.books = dataSource.books;
-      thisApp.favoriteBooks = [];
-      thisApp.filters = [];
+
     },
 
     getElements() {
@@ -51,6 +50,8 @@
       thisApp.dom.books = document.querySelectorAll(select.all.books);
       thisApp.dom.bookImages = document.querySelectorAll(select.all.bookImages);
       thisApp.dom.filterform = document.querySelector(select.form.filters);
+      thisApp.favoriteBooks = [];
+      thisApp.filters = [];
       console.log('thisApp.dom: ', thisApp.dom);
     },
 
@@ -101,17 +102,41 @@
             thisApp.filters.push(event.srcElement.value);
             console.log('event.srcElement.checked: ', event.srcElement.checked);
             console.log('zaznaczono filtr: ', event.srcElement.value);
-            thisApp.bookfilter();
+            thisApp.bookFilter();
 
           } else if(event.srcElement.checked == false) {
             const index = thisApp.filters.indexOf(event.srcElement.value);
             thisApp.filters.splice(index, 1);
             console.log('odznaczono filtr: ', event.srcElement.value);
+            thisApp.bookFilter();
           }
           console.log('thisApp.filters: ', thisApp.filters);
         }
       });
     },
+
+    bookFilter() {
+      const thisApp = this; 
+      let shouldBeHidden = false;
+
+      for(let book of thisApp.data.books) { 
+
+        for(const filter of thisApp.filters) {
+          if(!book.details[filter] == true) {
+            shouldBeHidden = true; 
+            break;
+          }
+        }
+        
+        const bookImg = document.querySelector('.book__image[data-id=' + '"' + book.id + '"]');
+          
+        if(shouldBeHidden) {
+          bookImg.classList.add('hidden'); 
+        } else {
+          bookImg.classList.remove('hidden');
+        }
+      }
+    }
   };
 
   app.initApp();
